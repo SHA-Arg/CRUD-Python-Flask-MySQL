@@ -33,6 +33,7 @@ def home():
 
 # Ruta para guardar usuarios a la base de datos
 @app.route('/user', methods=['POST'])
+# Funcion para guardar usuarios
 def saveUser():
     username = request.form['username']
     name  = request.form['name']
@@ -51,6 +52,45 @@ def saveUser():
         db.database.commit()
     # Para actualizar la vista
     return redirect(url_for('home'))
+
+# Ruta para eliminar usuarios
+@app.route('/delete/<string:Id>')
+# Funcion para eliminar usuarios
+def delete(Id):    
+    cursor = db.database.cursor()
+    # Consulta
+    sql = "DELETE FROM users WHERE Id =%s"
+    # Tupla para pasarle los datos
+    data= (Id,)
+    # Ejecutando la consulta
+    cursor.execute(sql, data)
+    # Commit a la base de datos
+    db.database.commit()
+    # Para actualizar la vista
+    return redirect(url_for('home'))
+
+# Ruta para actualizar usuarios
+@app.route('/edit/<string:Id>', methods=['POST'])
+# Funcion para actualizar usuarios
+def edit(Id):
+    username = request.form['username']
+    name  = request.form['name']
+    password = request.form['password']
+
+    if username and name and password:
+        cursor = db.database.cursor()
+        # Consulta
+        sql = "UPDATE users SET username = %s, name = %s, password = %s WHERE Id = %s"
+        # Tupla para pasarle los datos
+        data = (username, name, password, Id)
+        # Ejecutando la consulta
+        cursor.execute(sql, data)
+        # Commit a la base de datos
+        db.database.commit()
+    # Para actualizar la vista
+    return redirect(url_for('home'))
+
+
 
 # Esta linea lanza la aplicacion
 if __name__ == '__main__':

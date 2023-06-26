@@ -78,14 +78,41 @@
                                 {% for d in data %}                       
                                     <tr>
                                         <!-- Acceso a datos -->
-                                        <td>{{d.id}}</td>
+                                        <td>{{d.Id}}</td>
                                         <td>{{d.username}}</td>
                                         <td>{{d.name}}</td>
                                         <td>{{d.password}}</td>
-                                        <td><button class="btn btn-primary btn-sm" id="">Editar</button></td>
-                                        <td><a href="#" class="btn btn-danger btn-sm">Eliminar</a></td>
+                                        <td><button class="btn btn-primary btn-sm" id="btn-edit{{d.Id}}" data-bs-toggle="modal" data-bs-target="#modal{{d.Id}}">Editar</button></td>
+                                        <!-- En el href para ejecutar la ruta agregar funcion url_for con el nombre de la ruta y el campo que le pasamos  -->
+                                        <td><a href="{{url_for('delete', Id=d.Id)}}" class="btn btn-danger btn-sm">Eliminar</a></td>
                                     </tr>
-                                <!-- Cierr de bucle -->
+                                    <!-- Modal para modificar entradas -->  
+                                    <div class="modal fade" id="modal{{d.Id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">{{d.username}}l</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Cerrar</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <!-- Establecer formulario de modificacion -->
+                                                    <form action="/edit/{{d.Id}}" method="post">
+                                                        <label>Nombre de Usuario</label>
+                                                        <input type="text" name="username" class="form-control mb-3" placeholder="Nombre de Usuario" value="{{d.username}}"/>
+                                                        <label>Nombre Real</label>
+                                                        <input type="text" name="name" class="form-control mb-3" placeholder="Nombre Real" value="{{d.name}}" />
+                                                        <label>Contraseña</label>
+                                                        <input type="text" name="password" class="form-control mb-3" placeholder="Contraseña" value="{{d.password}}" />
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <!-- Cierre de bucle -->
                                 {% endfor %}
                             </tbody>
 					</div>
